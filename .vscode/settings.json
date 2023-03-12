@@ -1,0 +1,9 @@
+{
+    "markdownlint.config": {
+        "default": true,
+        /* because i like ending headings with a "!' sometimes */
+        "MD026": false,
+        /* it's a website, let me use HTML in my markdown */
+        "MD033": false
+    }
+}

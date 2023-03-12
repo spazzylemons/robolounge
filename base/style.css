@@ -1,0 +1,74 @@
+body {
+  background-image: url('/background.gif');
+  color: white;
+  margin: 0;
+  font-family: cursive;
+  min-height: 100vh;
+  animation: cursor 600ms infinite;
+}
+
+@keyframes cursor {
+  0% { cursor: url('/sword/sword1.png'), auto; }
+  16.66667% { cursor: url('/sword/sword2.png'), auto; }
+  33.33333% { cursor: url('/sword/sword3.png'), auto; }
+  50% { cursor: url('/sword/sword4.png'), auto; }
+  66.66667% { cursor: url('/sword/sword5.png'), auto; }
+  83.33333% { cursor: url('/sword/sword6.png'), auto; }
+  100% { cursor: url('/sword/sword1.png'), auto; }
+}
+
+header, main {
+  background-color: darkslateblue;
+  color: lightyellow;
+  padding: 1em;
+}
+
+header {
+  border-bottom: 1px dashed lightyellow;
+}
+
+.title {
+  padding: 0 1em;
+}
+
+a {
+  color: lightblue;
+}
+
+a:hover {
+  text-shadow: 0 0 2px lightyellow;
+}
+
+.navlink {
+  color: lightyellow;
+  text-decoration: unset;
+  padding: 0 1em;
+}
+
+main {
+  margin: 1em auto;
+  border: 1px dashed lightyellow;
+  max-width: 60em;
+  padding: 4em;
+}
+
+.title {
+  float: left;
+}
+
+.navlist {
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+@media (max-width: 68em) {
+  main {
+    border-left: none;
+    border-right: none;
+  }
+}
+
+figure, footer {
+  margin: auto;
+  text-align: center;
+}

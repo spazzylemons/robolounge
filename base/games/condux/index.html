@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Condux Web Demo</title>
+    <style>
+      body {
+        background-color: black;
+        font-family: monospace;
+        color: white;
+        text-align: center;
+      }
+
+      #canvas {
+        margin: auto;
+        display: block;
+        border: 1px solid white;
+      }
+
+      .controls-table {
+        white-space: pre;
+        text-align: left;
+        border-collapse: collapse;
+        margin: 1em auto;
+      }
+
+      tr {
+        border: 1px solid white;
+      }
+
+      th, td {
+        border: 1px solid white;
+        padding: 0.5em;
+      }
+
+      #gamepad-mapping-note {
+        color: red;
+      }
+
+      #virtual-analog {
+        user-select: none;
+        width: 200px;
+        height: 200px;
+        border: 1px solid white;
+        margin: auto;
+        display: table;
+      }
+
+      .mobile-controls {
+        display: table-cell;
+        vertical-align: middle;
+      }
+
+      #virtual-pause {
+        user-select: none;
+        width: 200px;
+        margin: 1em auto;
+        border: 1px solid white;
+        padding: 1em 0;
+      }
+    </style>
+  </head>
+  <body>
+    <a hidden rel="me" href="https://furry.engineer/@nil"></a>
+
+    <div id="gamepad-mapping-note" hidden>
+      A gamepad was found, but did not have the standard gamepad mapping. You
+      may find better compatibility on a Chromium-based browser if you're not
+      already using one.
+    </div>
+    <canvas id="canvas"></canvas>
+    <table class="controls-table">
+      <tr>
+        <th>action</th>
+        <th>keyboard</th>
+        <th>controller</th>
+        <th>mobile</th>
+      </tr>
+      <tr>
+        <td>steer</td>
+        <td>arrow keys</td>
+        <td>left stick</td>
+        <td>swipe left/right</td>
+      </tr>
+      <tr>
+        <td>accelerate</td>
+        <td>x</td>
+        <td>right button</td>
+        <td>swipe up</td>
+      </tr>
+      <tr>
+        <td>brake</td>
+        <td>z</td>
+        <td>bottom button</td>
+        <td>swipe down</td>
+      </tr>
+      <tr>
+        <td>toggle walls</td>
+        <td>escape</td>
+        <td>start/menu/pause</td>
+        <td>toggle walls button</td>
+      </tr>
+    </table>
+    <div id="virtual-analog">
+      <span class="mobile-controls">mobile controls</span>
+    </div>
+    <div id="virtual-pause">
+      toggle walls
+    </div>
+    <div>
+      <a href="https://github.com/spazzylemons/condux">source code available here</a>
+    </div>
+    <!-- wasm loader and bindings -->
+    <script src="./condux.js"></script>
+    <!-- load the data -->
+    <script>
+      wasm_bindgen('./condux_wasm.txt');
+    </script>
+  </body>
+</html>

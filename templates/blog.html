@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} | blog{% endblock %}
+{% block content %}
+<a href="/blog/">all posts</a> | <a href="/blog/blog.rss">rss feed</a>
+<br/>
+
+<article itemscope itemtype="https://schema.org/BlogPosting">
+  <h1>{{ title }}</h1>
+  <h4>posted {{ date }}</h4>
+  <div itemprop="https://schema.org/articleBody">
+{{ content|safe }}
+  </div>
+</article>
+{% endblock %}
