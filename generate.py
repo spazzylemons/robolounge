@@ -1,5 +1,7 @@
 import frontmatter
 import os
+import subprocess
+import tempfile
 
 from datetime import datetime
 from email.utils import format_datetime
@@ -18,6 +20,9 @@ BLOG_DIR = Path('blog')
 BLOG_PATH = BLOG_DIR / 'blog.rss'
 
 DOMAIN = 'https://robolounge.neocities.org/'
+
+def markdown_format(content: str):
+    return markdown(content, extensions=( 'fenced_code', ))
 
 def clear_out_dir():
     try:
@@ -46,7 +51,7 @@ class BlogPost:
         self.title: str = post['title']
         self.filename = filename + '.html'
         self.date: datetime.datetime = post['date']
-        self.content = markdown(post.content)
+        self.content = markdown_format(post.content)
 
     def full_path(self) -> Path:
         return BLOG_DIR / str(self.date.year) / str(self.date.month) / str(self.date.day) / self.filename
@@ -80,15 +85,29 @@ def write_out(content: Union[str, bytes], path: Path):
 def handle_base_file(path: Path):
     filename = path.name
     base, ext = os.path.splitext(filename)
-    if ext == '.md':
-        with open(path) as file:
-            post = frontmatter.load(file)
-        content = simple_spec.render(post)
-        out_name = base + '.html'
-    else:
-        with open(path, 'rb') as file:
-            content = file.read()
-        out_name = filename
+    match ext:
+        case '.md':
+            with open(path) as file:
+                post = frontmatter.load(file)
+            content = simple_spec.render(post)
+            out_name = base + '.html'
+        case '.scss' | '.sass':
+            with tempfile.NamedTemporaryFile() as temp:
+                process = subprocess.run(
+                    # read file in, write output to temporary file
+                    ('sass', '--no-source-map', str(path), temp.name),
+                    # capture stdout
+                    capture_output=True,
+                )
+                if process.returncode != 0:
+                    print(process.stderr.decode())
+                    raise RuntimeError('failed to run sass on {}'.format(path))
+                content = temp.read()
+            out_name = base + '.css'
+        case _:
+            with open(path, 'rb') as file:
+                content = file.read()
+            out_name = filename
     out_path = Path(*path.parent.parts[1:]) / out_name
     write_out(content, out_path)
 
@@ -119,8 +138,8 @@ def make_rss_feed(blog_posts: list[BlogPost]):
     ET.SubElement(channel, 'description').text = "nil's blog on the interwebs"
     ET.SubElement(channel, 'language').text = 'en-us'
     ET.SubElement(channel, 'atom:link', href=full_url_from_path(BLOG_PATH), rel='self', type='application/rss+xml')
-    # post items
-    for blog_post in blog_posts:
+    # post items - no more than 4
+    for blog_post in blog_posts[:min(4, len(blog_posts))]:
         channel.append(blog_post.rss_item())
     # write to rss file
     tree = ET.ElementTree(rss)
@@ -136,6 +155,7 @@ blog_spec: TemplateSpec[BlogPost] = TemplateSpec(
     gen=lambda p: {
         'title': p.title,
         'date': p.date.date().isoformat(),
+        'time': p.date.isoformat(),
         'content': p.content,
     },
 )
@@ -151,7 +171,7 @@ simple_spec: TemplateSpec[frontmatter.Post] = TemplateSpec(
     name='simple.html',
     gen=lambda p: {
         'breadcrumbs': p['breadcrumbs'],
-        'content': markdown(p.content),
+        'content': markdown_format(p.content),
     },
 )
 

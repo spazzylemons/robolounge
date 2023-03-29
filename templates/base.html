@@ -1,42 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8"/>
-    <meta lang="en"/>
+    <meta charset="utf-8" />
+    <meta lang="en" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{% block title %}{% endblock %} | robolounge</title>
     <link rel="stylesheet" href="/style.css" type="text/css" />
+    <!-- code block theming -->
+    <link rel="stylesheet" href="https://unpkg.com/prismjs@v1.x/themes/prism-tomorrow.min.css" type="text/css" />
   </head>
   <body>
     <a hidden rel="me" href="https://furry.engineer/@nil"></a>
 
-    <header>
-      <nav>
-        <span class="title">robolounge</span>
+    <div class="header">
+      <header>
+        <nav>
+          <span class="title">robolounge</span>
 
-        <div class="navlist">
-          <a class="navlink" href="/">home</a>
-          <a class="navlink" href="/blog/">blog</a>
-          <a class="navlink" href="/games/">games</a>
-          <a class="navlink" href="/comms/">commissions</a>
-          <a class="navlink" href="/contact/">contact</a>
-        </div>
-      </nav>
-    </header>
+          <div class="navlist">
+            <a class="navlink" href="/">home</a>
+            <a class="navlink" href="/blog/">blog</a>
+            <a class="navlink" href="/games/">games</a>
+            <a class="navlink" href="/comms/">commissions</a>
+            <a class="navlink" href="/contact/">contact</a>
+          </div>
+        </nav>
+      </header>
+    </div>
 
-    <main>
+    <div class="main">
+      <main>
 {% block content %}{% endblock %}
-    </main>
-    <footer>
-      <a href="https://validator.w3.org/feed/check.cgi?url=https%3A%2F%2Frobolounge.neocities.org%2Fblog%2Fblog.rss"><img src="/valid-rss-rogers.png" alt="[Valid RSS]" title="Validate my RSS feed" /></a>
-      <a href="https://firefox.com/"><img src="/firefoxnow.gif" alt="Firefox NOW!" /></a>
-      <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"/></a>
-      <br/>
-      This content is generally licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-      <br/>
-      This license does not apply to my own artwork, for which I reserve all
-      rights, nor do I permit the use of my artwork or writing for NFTs,
-      machine learning, or the like.
-    </footer>
+      </main>
+    </div>
+    <div class="footer">
+      <footer>
+        <a href="https://validator.w3.org/feed/check.cgi?url=https%3A%2F%2Frobolounge.neocities.org%2Fblog%2Fblog.rss"><img src="/valid-rss-rogers.png" alt="[Valid RSS]" title="Validate my RSS feed" /></a>
+        <a href="https://firefox.com/"><img src="/firefoxnow.gif" alt="Firefox NOW!" /></a>
+        <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" src="/license.png"/></a>
+        <br/>
+        This content is generally licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+        <br/>
+        This license does not apply to my own artwork, for which I reserve all
+        rights, nor do I permit the use of my artwork or writing for NFTs,
+        machine learning, or the like.
+      </footer>
+    </div>
+
+    <!-- code block formatting -->
+    <script type="text/javascript" src="https://unpkg.com/prismjs@v1.x/components/prism-core.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/prismjs@v1.x/plugins/autoloader/prism-autoloader.min.js"></script>
   </body>
 </html>

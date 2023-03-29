@@ -6,4 +6,6 @@ breadcrumbs: home
 
 main page under construction
 
+FFDc3ad A+ C D H+ M- P++ R+ T+++ W-- Z Sm+
+
 ![robot oc doing a blep](/blep.png)

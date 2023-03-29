@@ -1,0 +1,86 @@
+$dark: #232539
+$med: #9193aa
+$light: #b5b7d4
+$link-color: #5a6ab6
+
+$main-width: 960px
+$main-padding: 16px
+
+// using a mixin instead of css vars to inline theming data, allowing it to work on old browsers
+@mixin theme($bg, $fg, $bg-gif)
+  body
+    background-color: $bg
+    background-image: url($bg-gif)
+
+    color: $fg
+
+  .header
+    background-color: $bg
+    border-bottom: 1px dashed $fg
+
+  .main
+    background-color: $bg
+    border: 1px dashed $fg
+
+  .navlink
+    color: $fg
+
+body
+  font-family: cursive
+
+  margin: 0
+
+  animation: cursor 600ms infinite
+  // by extending the page to 100% height, the custom cursor doesn't disappear below the footer
+  min-height: 100vh
+
+.header
+  padding: 16px
+
+.main
+  margin: 16px auto
+  max-width: $main-width
+  padding: $main-padding
+
+.title
+  padding: 0 16px
+
+a
+  color: $link-color
+
+  :hover
+    text-shadow: 0 0 2px $link-color
+
+.navlink
+  text-decoration: unset
+  padding: 0 16px
+
+.title
+  float: left
+
+.navlist
+  overflow-x: auto
+  white-space: nowrap
+
+figure, .footer
+  margin: auto
+  text-align: center
+
+.footer
+  padding-bottom: 16px
+
+@include theme($dark, $med, 'bg_dark.gif')
+
+@keyframes cursor
+  @for $i from 0 through 6
+    #{100 * ($i / 6)}%
+      cursor: url('/sword/sword#{($i % 6) + 1}.png'), auto
+
+// if there's no padding on the sides of the main page, then remove the side borders
+@media (max-width: $main-width + (2 * $main-padding))
+  .main
+    border-left: none
+    border-right: none
+
+@media (prefers-color-scheme: light)
+  @include theme($light, $dark, 'bg_light.gif')

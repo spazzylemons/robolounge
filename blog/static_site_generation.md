@@ -34,13 +34,17 @@ Jinja will properly escape characters so that the page is correct. And since
 it's for Python, I can use all of the other features of the Python ecosystem to
 my advantage.
 
-    <head>
-      <!-- with Jinja, I can create a placeholder in HTML -->
-      <title>{{ my_title }}</title>
-    </head>
-    ...
-    # and render it from Python
-    print(template.render(my_title="Hello world"))
+```html
+<head>
+  <!-- with Jinja, I can create a placeholder in HTML -->
+  <title>{{ my_title }}</title>
+</head>
+```
+
+```py
+# and render it from Python
+print(template.render(my_title="Hello world"))
+```
 
 In order to build webpages, I set up a few template files. One is for all
 webpages and includes the header and footer. The rest extend this template, with
@@ -62,11 +66,13 @@ tells you what's on the page and how you got there. For blog posts, this
 includes the title of the post and the date of publishing, which is used in
 formatting pages and creating an RSS feed.
 
-    ---
-    metadata: goes here
-    ---
+```md
+---
+metadata: goes here
+---
 
-    Page content goes _here_!
+Page content goes _here_!
+```
 
 The Python script I wrote will copy all files from a `base` directory to an
 `out` directory, except for Markdown files, which will be processed by Markdown

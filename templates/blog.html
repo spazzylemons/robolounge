@@ -5,9 +5,9 @@
 <br/>
 
 <article itemscope itemtype="https://schema.org/BlogPosting">
-  <h1>{{ title }}</h1>
-  <h4>posted {{ date }}</h4>
-  <div itemprop="https://schema.org/articleBody">
+  <h1 itemprop="name headline">{{ title }}</h1>
+  <h4>posted <time itemprop="datePublished" datetime="{{ time }}">{{ date }}</time></h4>
+  <div itemprop="articleBody">
 {{ content|safe }}
   </div>
 </article>
