@@ -1,17 +1,21 @@
 import frontmatter
 import os
+import re
 import subprocess
 import tempfile
+import pytz
 
-from datetime import datetime
+import datetime
 from email.utils import format_datetime
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from markdown import markdown
+from markdown import markdown, Extension, Markdown
+from markdown.treeprocessors import Treeprocessor
 from pathlib import Path
 from shutil import rmtree
 from typing import Any, Callable, Generic, Optional, TextIO, TypeVar, Union
 
 import xml.etree.cElementTree as ET
+import xml.etree.ElementTree as etree
 
 OUT_DIR = Path('out')
 BASE_DIR = Path('base')
@@ -21,8 +25,34 @@ BLOG_PATH = BLOG_DIR / 'blog.rss'
 
 DOMAIN = 'https://robolounge.neocities.org/'
 
+# Set this timezone for the timezone where you want your dates to align to.
+# This will be used for generating the RSS pubDate values.
+TIMEZONE_NAME = 'US/Eastern'
+TIMEZONE = pytz.timezone(TIMEZONE_NAME)
+
+# A basic tree processor that converts all standalone images with titles into
+# figures with captions.
+class FigCaptionTreeprocessor(Treeprocessor):
+    def run(self, root: etree.Element):
+        for p in root.findall('p'):
+            if len(p) == 1:
+                img = p.find('img')
+                if img is not None and 'title' in img.keys():
+                    # Create caption to store image title.
+                    figcaption = etree.SubElement(p, 'figcaption')
+                    figcaption.text = img.get('title')
+                    # Remove title from image.
+                    del img.attrib['title']
+                    # Convert the paragraph into a figure.
+                    p.tag = 'figure'
+
+class FigCaptionExtension(Extension):
+    def extendMarkdown(self, md: Markdown) -> None:
+        md.registerExtension(self)
+        md.treeprocessors.register(FigCaptionTreeprocessor(), 'figcaption', 10)
+
 def markdown_format(content: str):
-    return markdown(content, extensions=( 'fenced_code', ))
+    return markdown(content, extensions=( FigCaptionExtension(), 'fenced_code', 'smarty' ))
 
 def clear_out_dir():
     try:
@@ -50,11 +80,11 @@ class BlogPost:
         post = frontmatter.load(file)
         self.title: str = post['title']
         self.filename = filename + '.html'
-        self.date: datetime.datetime = post['date']
+        self.date: datetime.date = post['date']
         self.content = markdown_format(post.content)
 
     def full_path(self) -> Path:
-        return BLOG_DIR / str(self.date.year) / str(self.date.month) / str(self.date.day) / self.filename
+        return BLOG_DIR / str(self.date.year) / '{:02}'.format(self.date.month) / '{:02}'.format(self.date.day) / self.filename
 
     def url(self) -> str:
         return self.full_path().as_posix()
@@ -63,12 +93,15 @@ class BlogPost:
         return blog_spec.render(self)
 
     def rss_item(self) -> ET.Element:
+        # calculate datetime using the timezone at the given date
+        pub_date = datetime.datetime.combine(self.date, datetime.time())
+        pub_date = datetime.datetime.combine(self.date, datetime.time(), datetime.timezone(TIMEZONE.utcoffset(pub_date)))
         item = ET.Element('item')
         link = full_url_from_path(self.full_path())
         ET.SubElement(item, 'title').text = self.title
         ET.SubElement(item, 'link').text = link
         ET.SubElement(item, 'guid').text = link
-        ET.SubElement(item, 'pubDate').text = format_datetime(self.date)
+        ET.SubElement(item, 'pubDate').text = format_datetime(pub_date)
         return item
 
 def without_ext(filename: str) -> str:
@@ -154,8 +187,7 @@ blog_spec: TemplateSpec[BlogPost] = TemplateSpec(
     name='blog.html',
     gen=lambda p: {
         'title': p.title,
-        'date': p.date.date().isoformat(),
-        'time': p.date.isoformat(),
+        'date': p.date.isoformat(),
         'content': p.content,
     },
 )

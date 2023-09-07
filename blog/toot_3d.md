@@ -1,6 +1,6 @@
 ---
 title: toot 3d
-date: 2023-03-28T19:57:15-4
+date: 2023-03-28
 ---
 
 I'm writing this mostly so that I can move on from the project, because I really

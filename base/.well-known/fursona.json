@@ -1,0 +1,33 @@
+{
+    "sonas": [
+        {
+            "name": "Nil",
+            "pronouns": "he/they/it",
+            "species": "Synth",
+            "ref": "https://robolounge.neocities.org/fursona/ref/nil.png",
+            "avatar": "https://robolounge.neocities.org/fursona/avatar/nil.gif",
+            "description": "curious computer nerd",
+            "colors": [
+                "#1b2538",
+                "#52b270",
+                "#b6b9c5",
+                "#34599e"
+            ]
+        },
+
+        {
+            "name": "Star",
+            "pronouns": "he/they",
+            "species": "Android Cat",
+            "ref": "https://robolounge.neocities.org/fursona/ref/star.png",
+            "avatar": "https://robolounge.neocities.org/fursona/avatar/star.png",
+            "description": "will not stop meowing",
+            "colors": [
+                "#ffb272",
+                "#ffed71",
+                "#71ffee",
+                "#b8fff7"
+            ]
+        }
+    ]
+}

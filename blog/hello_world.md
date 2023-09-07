@@ -1,6 +1,6 @@
 ---
 title: hello world
-date: 2023-03-03T17:33:00-5
+date: 2023-03-03
 ---
 
 [A certain dhole suggested that more furries write blogs.](https://furry.engineer/@soatok/109936791707216276)

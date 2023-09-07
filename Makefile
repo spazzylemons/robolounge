@@ -7,4 +7,4 @@ test: all
 	cd out && python -m http.server
 
 upload: all
-	neocities push out
+	ruby upload.rb

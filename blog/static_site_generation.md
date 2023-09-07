@@ -1,6 +1,6 @@
 ---
 title: adventures in static site generation
-date: 2023-03-12T16:17:00-4
+date: 2023-03-12
 ---
 
 So I wanted to add better mobile support to my webpage. When viewing the site on
