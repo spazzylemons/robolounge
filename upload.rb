@@ -16,6 +16,8 @@ client = Neocities::Client.new api_key: api_key
 def walk(client, path)
   if path.file?
     resp = client.upload path, path, true
+    # Need this to avoid getting rate limited and blocked.
+    sleep 0.25
     print path
     if resp[:result] == 'error' && resp[:error_type] == 'file_exists'
       puts ' exists'
