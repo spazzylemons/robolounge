@@ -11,6 +11,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from markdown import markdown, Extension, Markdown
 from markdown.treeprocessors import Treeprocessor
 from pathlib import Path
+from pygments.formatters import HtmlFormatter
 from shutil import rmtree
 from typing import Any, Callable, Generic, Optional, TextIO, TypeVar, Union
 
@@ -52,7 +53,17 @@ class FigCaptionExtension(Extension):
         md.treeprocessors.register(FigCaptionTreeprocessor(), 'figcaption', 10)
 
 def markdown_format(content: str):
-    return markdown(content, extensions=( FigCaptionExtension(), 'fenced_code', 'smarty' ))
+    return markdown(
+        content, 
+        extensions=(FigCaptionExtension(), 'codehilite', 'fenced_code', 'smarty'),
+        extension_configs={
+            'codehilite': {
+                'classprefix': 'pygments-',
+                'guess_lang': False,
+                'wrapcode': True,
+            }
+        },
+    )
 
 def clear_out_dir():
     try:
@@ -150,6 +161,17 @@ def walk_base_dir():
         for filename in filenames:
             handle_base_file(path / filename)
 
+def create_pygment_stylesheet():
+    # Generate CSS style
+    css = HtmlFormatter(
+        classprefix='pygments-',
+        style='lightbulb',
+    ).get_style_defs()
+    # Remove the first line to prevent line height adjustments
+    css = css[css.index('\n') + 1:]
+    with open(OUT_DIR / 'pygments.css', 'w') as file:
+        file.write(css)
+
 def create_blog_posts() -> list[BlogPost]:
     result = []
     for filename in os.listdir(BLOG_DIR):
@@ -209,4 +231,5 @@ simple_spec: TemplateSpec[frontmatter.Post] = TemplateSpec(
 
 clear_out_dir()
 walk_base_dir()
+create_pygment_stylesheet()
 make_rss_feed(create_blog_posts())

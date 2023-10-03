@@ -1,18 +1,47 @@
+// These colors are WCAG AAA compliant.
 $dark: #232539
-$med: #9193aa
-$light: #b5b7d4
-$link-color: #5a6ab6
+$dark-link: #77e494
+// These colors are AA compliant, sorry
+$light: #c8c9df
+$light-link: #15602d
 
 $main-width: 960px
 $main-padding: 16px
 
+// Avoid loading too many fonts by using variable font
+// TODO add non-variable fonts as fallbacks
+@font-face
+  font-family: Montserrat
+  src: url('/fonts/Montserrat-Variable.woff2') format('woff2')
+  font-weight: 100 900
+  font-style: normal
+
+// Victor Mono for <pre>
+@mixin monospace($path, $weight, $style)
+  @font-face
+    font-family: 'Victor Mono'
+    src: url($path) format('woff2')
+    font-weight: $weight
+    font-style: $style
+
+@include monospace('/fonts/VictorMono-Regular.woff2', normal, normal)
+@include monospace('/fonts/VictorMono-Bold.woff2', bold, normal)
+@include monospace('/fonts/VictorMono-RegularItalic.woff2', normal, italic)
+@include monospace('/fonts/VictorMono-BoldItalic.woff2', bold, italic)
+
 // using a mixin instead of css vars to inline theming data, allowing it to work on old browsers
-@mixin theme($bg, $fg, $bg-gif)
+@mixin theme($bg, $fg, $link, $bg-gif)
   body
     background-color: $bg
     background-image: url($bg-gif)
 
     color: $fg
+
+  a
+    color: $link
+
+  a:hover
+    text-shadow: 0 0 2px $link
 
   .header
     background-color: $bg
@@ -20,19 +49,21 @@ $main-padding: 16px
 
   .main
     background-color: $bg
+
+  .main, .codehilite pre
     border: 1px dashed $fg
+    border-radius: 16px
 
   .navlink
     color: $fg
 
 body
-  font-family: sans-serif
-
+  font-family: Montserrat, sans-serif
   margin: 0
-
   animation: cursor 600ms infinite
   // by extending the page to 100% height, the custom cursor doesn't disappear below the footer
   min-height: 100vh
+  line-height: 150%
 
 .header
   padding: 16px
@@ -44,12 +75,6 @@ body
 
 .title
   padding: 0 16px
-
-a
-  color: $link-color
-
-  :hover
-    text-shadow: 0 0 2px $link-color
 
 .navlink
   text-decoration: unset
@@ -72,7 +97,17 @@ figure, .footer
 figure img
   max-width: 100%
 
-@include theme($dark, $med, 'bg_dark.gif')
+.codehilite pre
+  background-color: #1d2331
+  padding: 16px
+  margin: 16px 0px
+  line-height: 20px
+
+code
+  font-family: 'Victor Mono', monospace
+  font-size: 14px
+
+@include theme($dark, $light, $dark-link, 'bg_dark.gif')
 
 @keyframes cursor
   @for $i from 0 through 6
@@ -84,6 +119,7 @@ figure img
   .main
     border-left: none
     border-right: none
+    border-radius: 0px
 
 @media (prefers-color-scheme: light)
-  @include theme($light, $dark, 'bg_light.gif')
+  @include theme($light, $dark, $light-link, 'bg_light.gif')
